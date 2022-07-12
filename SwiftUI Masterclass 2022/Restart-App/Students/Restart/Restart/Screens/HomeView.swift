@@ -10,6 +10,10 @@ import SwiftUI
 struct HomeView: View {
     // MARK: - Property
     @AppStorage("onboarding") var isOnboardingViewActive: Bool = false
+    @State private var isAnimating: Bool = false
+    
+    // MARK: - Body
+    
     var body: some View {
         VStack(spacing: 20) {
             // MARK: - Header
@@ -22,9 +26,14 @@ struct HomeView: View {
                 Image("character-2")
                     .resizable()
                     .scaledToFit()
-                .padding()
+                    .padding()
+                    .offset(y: isAnimating ? 35 : -35)
+                    .animation(Animation
+                        .easeOut(duration: 4)
+                        .repeatForever()
+                               , value: isAnimating)
             }
-
+            
             // MARK: - Center
             
             Text("The time taht leads to mastery is dependent on the intensity of out focus.")
@@ -34,14 +43,16 @@ struct HomeView: View {
                 .multilineTextAlignment(.center)
                 .padding()
             
-            
-            
             // MARK: - Footer
             
             Spacer()
             
             Button(action: {
-                isOnboardingViewActive = true
+                // 따로 애니매이션 설정 안하면 기본 애니매이션 실행됨
+                withAnimation {
+                    playSound(sound: "success", type: "m4a")
+                    isOnboardingViewActive = true
+                }
             }) {
                 Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
                     .imageScale(.large)
@@ -55,6 +66,12 @@ struct HomeView: View {
             .controlSize(.large)
             
         } //: VStack
+        // View가 Appear되고 n초 후
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                isAnimating = true
+            }
+        }
     }
 }
 
