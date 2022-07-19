@@ -32,7 +32,7 @@ struct ContentView: View {
                     .opacity(isAnimating ? 1 : 0)
                     .scaleEffect(imageScale)
                 // MARK: - 1. Tap Gesture
-                // 더블 탭으로 확대 축소
+                // 더블 탭으로 확대 축소함
                     .onTapGesture(count: 2) {
                         if imageScale == 1 {
                             withAnimation(.spring()) {
